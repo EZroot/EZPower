@@ -32,6 +32,7 @@ namespace EZPower.ProgramFeatures.Shipateer
         }
     }
 
+    [System.Serializable]
     public class BuildingData
     {
         string _name;

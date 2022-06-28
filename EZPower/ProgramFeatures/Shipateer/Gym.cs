@@ -36,6 +36,7 @@ namespace EZPower.ProgramFeatures.Shipateer
         }
     }
 
+    [System.Serializable]
     public class GymData
     {
         float _strengthXpModifier;

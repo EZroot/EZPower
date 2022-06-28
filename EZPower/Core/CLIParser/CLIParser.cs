@@ -19,6 +19,21 @@ namespace EZPower.Core.CLIParser
             return JsonConvert.DeserializeObject(json);
         }
 
+        public static string LoadJson(string path)
+        {
+            string result = "";
+            using (StreamReader sr = new StreamReader(path))
+            {
+                result = sr.ReadToEnd();
+            }
+            return result;
+        }
+
+        public static object LoadJsonObject(string path)
+        {
+            return FromJson(LoadJson(path));
+        }
+
         public static async Task SaveJson(string json, string path)
         {
             using (StreamWriter sw = new StreamWriter(path))
@@ -27,6 +42,18 @@ namespace EZPower.Core.CLIParser
             }
         }
 
+        public static void ParseImmediateCommand(string command, string cliText, Action function)
+        {
+            string[] res = cliText.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            foreach(string s in res)
+            {
+                if(s.ToLower().Contains(command.ToLower()))
+                {
+                    function.Invoke();
+                    break;
+                }
+            }
+        }
         public static object ParseCreateFeature(string featureName)
         {
             return Activator.CreateInstance(Type.GetType(featureName));

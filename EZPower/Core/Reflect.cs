@@ -58,6 +58,19 @@ namespace EZPower
             return featureInfoList.ToArray();
         }
 
+        public static bool DoesFeatureExist(string featureName)
+        {
+            ProgramFeatureInfo[] info = Reflect.GetAllProgramFeatures();
+            foreach (ProgramFeatureInfo i in info)
+            {
+                if (i.ProgramName.ToLower().Contains(featureName.ToLower()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         public static string GetClassFullName(string featureName)
         {
             foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())

@@ -7,7 +7,12 @@ namespace EZPower.Core.CLIParser
     //replace the shit debug stuff
     public static class CLI
     {
-        static string _defaultPrefix = ":>";
+        public static string DefaultPrefix = ">";
+        public static void Clear()
+        {
+            Console.Clear();
+        }
+
         public static string ReadLine(string prefix)
         {
             Print(prefix, ConsoleColor.White, true);
@@ -16,7 +21,7 @@ namespace EZPower.Core.CLIParser
 
         public static string ReadLine()
         {
-            Print(_defaultPrefix, ConsoleColor.White, false);
+            Print(DefaultPrefix+" ", ConsoleColor.White, false);
             return Console.ReadLine();
         }
 
@@ -63,5 +68,6 @@ namespace EZPower.Core.CLIParser
             Console.SetCursorPosition(position.x, position.y);
             Console.Write(value);
         }
+
     }
 }
