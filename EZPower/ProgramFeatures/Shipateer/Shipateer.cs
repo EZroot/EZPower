@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EZPower.ProgramFeatures.Shipateer
 {
@@ -18,13 +19,26 @@ namespace EZPower.ProgramFeatures.Shipateer
 
         public override void Start()
         {
-            
+            _programData = new ShipateerData();
         }
 
-        [ProgramFeatureArgs("HelpText", 'h',"Show a list of commands")]
+        [ProgramFeatureArgs("ShowHelpText", 'h',"Show a list of commands")]
         public void ShowHelpText()
         {
             base.GetHelpText();
+        }
+
+        [ProgramFeatureArgs("SaveJsonData", 's', "Save data")]
+        public void SaveJsonData()
+        {
+            base.SaveGameData(_programData, GetType().Name);
+        }
+
+        [ProgramFeatureArgs("LoadJsonData", 'l', "Load data")]
+        public void LoadJsonData()
+        {
+            ShipateerData da = (ShipateerData)base.LoadGameData<ShipateerData>(GetType().Name);
+            da.Player.ShowPlayerStats();
         }
 
         [ProgramFeatureArgs("BuyBusiness",'b',"Buy a local business", "businessName")]

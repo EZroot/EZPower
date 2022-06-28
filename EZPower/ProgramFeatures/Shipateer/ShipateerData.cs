@@ -5,7 +5,7 @@ using System.Text;
 namespace EZPower.ProgramFeatures.Shipateer
 {
     [System.Serializable]
-    public class ShipateerData
+    public class ShipateerData : ProgramData
     {
         Player player = new Player(
     new PlayerProfileStats("Dillon", 100, 10),

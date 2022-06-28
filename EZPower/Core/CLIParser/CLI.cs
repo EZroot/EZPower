@@ -21,7 +21,7 @@ namespace EZPower.Core.CLIParser
 
         public static string ReadLine()
         {
-            Print(DefaultPrefix+" ", ConsoleColor.White, false);
+            Print(DefaultPrefix, ConsoleColor.White, false);
             return Console.ReadLine();
         }
 

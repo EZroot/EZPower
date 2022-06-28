@@ -62,7 +62,7 @@ namespace EZPower.ProgramFeatures.Shipateer
     }
 
     [System.Serializable]
-    public class PlayerData
+    public class PlayerData : ProgramData
     {
         PlayerProfileStats _playerProfileStats;
         PlayerCombatStats _playerCombatStats;
@@ -83,7 +83,7 @@ namespace EZPower.ProgramFeatures.Shipateer
         public PlayerMoneyStats PlayerMoneyStats { get => _playerMoneyStats; set => _playerMoneyStats = value; }
     }
     [System.Serializable]
-    public class PlayerProfileStats
+    public class PlayerProfileStats : ProgramData
     {
         string _name;
         int _energy;
@@ -101,7 +101,7 @@ namespace EZPower.ProgramFeatures.Shipateer
         public int Nerve { get => _nerve; set => _nerve = value; }
     }
     [System.Serializable]
-    public class PlayerCombatStats
+    public class PlayerCombatStats : ProgramData
     {
         float _strength; //inc dmg
         float _defense; //lower dmg
@@ -122,7 +122,7 @@ namespace EZPower.ProgramFeatures.Shipateer
         public float Dexterity { get => _dexterity; set => _dexterity = value; }
     }
     [System.Serializable]
-    public class PlayerHistoryStats
+    public class PlayerHistoryStats : ProgramData
     {
 
         int _ageInDays;
@@ -151,7 +151,7 @@ namespace EZPower.ProgramFeatures.Shipateer
     }
 
     [System.Serializable]
-    public class PlayerMoneyStats
+    public class PlayerMoneyStats : ProgramData
     {
         float _currentMoney;
         float _totalMoneyMade;

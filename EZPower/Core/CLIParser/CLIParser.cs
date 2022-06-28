@@ -9,18 +9,24 @@ namespace EZPower.Core.CLIParser
 {
     public static class CLIParser
     {
-        public static string ToJson(object value)
+        public static string ToJson<T>(T value)
         {
             return JsonConvert.SerializeObject(value);
         }
 
-        public static object FromJson(string json)
+        public static object FromJson<T>(string json)
         {
-            return JsonConvert.DeserializeObject(json);
+            return JsonConvert.DeserializeObject<T>(json);
         }
 
         public static string LoadJson(string path)
         {
+            if (!File.Exists(path))
+            {
+                Debug.Error("NO FILE EXISTS");
+                return ""; 
+            }
+
             string result = "";
             using (StreamReader sr = new StreamReader(path))
             {
@@ -29,16 +35,16 @@ namespace EZPower.Core.CLIParser
             return result;
         }
 
-        public static object LoadJsonObject(string path)
+        public static object LoadJsonObject<T>(string path)
         {
-            return FromJson(LoadJson(path));
+            return FromJson<T>(LoadJson(path));
         }
 
-        public static async Task SaveJson(string json, string path)
+        public static void SaveJson(string json, string path)
         {
             using (StreamWriter sw = new StreamWriter(path))
             {
-                await sw.WriteLineAsync(json);
+                sw.WriteLine(json);
             }
         }
 
@@ -92,8 +98,6 @@ namespace EZPower.Core.CLIParser
 
             //get method associated with key
             //execute it and its params
-
-            List<FeatureArgumentTemplate> argList = new List<FeatureArgumentTemplate>();
 
             ProgramFeatureInfo[] info = Reflect.GetAllProgramFeatures();
             string featureName = ParseFeatureName(cliText);

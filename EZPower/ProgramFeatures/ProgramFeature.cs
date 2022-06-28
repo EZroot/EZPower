@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace EZPower.ProgramFeatures
 {
@@ -21,6 +22,16 @@ namespace EZPower.ProgramFeatures
         public virtual void LateUpdate()
         {
 
+        }
+
+        public object LoadGameData<T>(string featureName) 
+        {
+            return CLIParser.LoadJsonObject<T>(featureName + ".ezdat");
+        }
+
+        public void SaveGameData<T>(T data, string featureName)
+        {
+            CLIParser.SaveJson(CLIParser.ToJson(data), featureName + ".ezdat");
         }
 
         public void GetHelpText()
