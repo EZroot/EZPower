@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "PNmOe8hMIi9Khb9Fh5hwBsglVx8I4G8q5BJA+r/S1U4He1f3+HXYb83Ufk2AXtoN8qE/wD//f7/AeKFFG/i6mg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\ezroot\\source\\repos\\EZPower\\EZPower\\EZPower.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\ezroot\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}

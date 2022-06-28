@@ -1,0 +1,16 @@
+C:\Users\ezroot\source\repos\EZPower\EZPower\bin\Debug\netcoreapp3.1\EZPower.exe
+C:\Users\ezroot\source\repos\EZPower\EZPower\bin\Debug\netcoreapp3.1\EZPower.deps.json
+C:\Users\ezroot\source\repos\EZPower\EZPower\bin\Debug\netcoreapp3.1\EZPower.runtimeconfig.json
+C:\Users\ezroot\source\repos\EZPower\EZPower\bin\Debug\netcoreapp3.1\EZPower.runtimeconfig.dev.json
+C:\Users\ezroot\source\repos\EZPower\EZPower\bin\Debug\netcoreapp3.1\EZPower.dll
+C:\Users\ezroot\source\repos\EZPower\EZPower\bin\Debug\netcoreapp3.1\EZPower.pdb
+C:\Users\ezroot\source\repos\EZPower\EZPower\obj\Debug\netcoreapp3.1\EZPower.csproj.AssemblyReference.cache
+C:\Users\ezroot\source\repos\EZPower\EZPower\obj\Debug\netcoreapp3.1\EZPower.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ezroot\source\repos\EZPower\EZPower\obj\Debug\netcoreapp3.1\EZPower.AssemblyInfoInputs.cache
+C:\Users\ezroot\source\repos\EZPower\EZPower\obj\Debug\netcoreapp3.1\EZPower.AssemblyInfo.cs
+C:\Users\ezroot\source\repos\EZPower\EZPower\obj\Debug\netcoreapp3.1\EZPower.csproj.CoreCompileInputs.cache
+C:\Users\ezroot\source\repos\EZPower\EZPower\obj\Debug\netcoreapp3.1\EZPower.dll
+C:\Users\ezroot\source\repos\EZPower\EZPower\obj\Debug\netcoreapp3.1\EZPower.pdb
+C:\Users\ezroot\source\repos\EZPower\EZPower\obj\Debug\netcoreapp3.1\EZPower.genruntimeconfig.cache
+C:\Users\ezroot\source\repos\EZPower\EZPower\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\ezroot\source\repos\EZPower\EZPower\obj\Debug\netcoreapp3.1\EZPower.csproj.CopyComplete
