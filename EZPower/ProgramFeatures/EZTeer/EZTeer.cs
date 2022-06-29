@@ -12,8 +12,8 @@ namespace EZPower.ProgramFeatures.Shipateer
     //[ProgramHelper('j', "Job")]
     //[ProgramHelper('p', "Properties")]
     //[ProgramHelper('c', "Crime")]
-    [ProgramFeature("Shipateer", "Little minigame for fun.")]
-    public class Shipateer : ProgramFeature, IProgramFeature
+    [ProgramFeature("EZTeer", "Little minigame for fun.")]
+    public class EZTeer : ProgramFeature, IProgramFeature
     {
         ShipateerData _programData;
 
@@ -31,7 +31,7 @@ namespace EZPower.ProgramFeatures.Shipateer
         [ProgramFeatureArgs("SaveJsonData", 's', "Save data")]
         public void SaveJsonData()
         {
-            base.SaveGameData(_programData, GetType().Name);
+            SaveGameData(_programData);
         }
 
         [ProgramFeatureArgs("LoadJsonData", 'l', "Load data")]

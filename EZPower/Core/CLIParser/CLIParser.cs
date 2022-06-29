@@ -21,6 +21,9 @@ namespace EZPower.Core.CLIParser
 
         public static string LoadJson(string path)
         {
+            path = Directory.GetCurrentDirectory() + "\\" + path + ".ezdat";
+            Debug.Warn(path);
+
             if (!File.Exists(path))
             {
                 Debug.Error("NO FILE EXISTS");
@@ -42,6 +45,9 @@ namespace EZPower.Core.CLIParser
 
         public static void SaveJson(string json, string path)
         {
+            path = Directory.GetCurrentDirectory() + "\\"+path+".ezdat";
+            Debug.Warn(path);
+
             using (StreamWriter sw = new StreamWriter(path))
             {
                 sw.WriteLine(json);
@@ -70,7 +76,7 @@ namespace EZPower.Core.CLIParser
             return cliText.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0];
         }
 
-        public static void ParseFeatureArgs(string cliText, dynamic feature)
+        public static string ParseFeatureArgs(string cliText, dynamic feature)
         {
             string[] args = cliText.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             Dictionary<char, List<string>> keyAndParams = new Dictionary<char, List<string>>();
@@ -98,7 +104,7 @@ namespace EZPower.Core.CLIParser
 
             //get method associated with key
             //execute it and its params
-
+            string res = "";
             ProgramFeatureInfo[] info = Reflect.GetAllProgramFeatures();
             string featureName = ParseFeatureName(cliText);
             foreach(ProgramFeatureInfo i in info)
@@ -114,7 +120,7 @@ namespace EZPower.Core.CLIParser
                             //if keys match
                             if(hi.Key==kvp.Key)
                             {
-                                hi.Function.Invoke(feature, kvp.Value.ToArray());
+                                res += (string)hi.Function.Invoke(feature, kvp.Value.ToArray());
                                 continue;
                             }
                         }
@@ -122,7 +128,7 @@ namespace EZPower.Core.CLIParser
                 }
             }
 
-            
+            return res;
         }
     }
 }

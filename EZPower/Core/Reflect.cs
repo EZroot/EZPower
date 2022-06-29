@@ -99,7 +99,7 @@ namespace EZPower
                     {
                         foreach(ProgramFeatureArgsAttribute ap in t.GetCustomAttributes(typeof(ProgramFeatureArgsAttribute)))
                         {
-                            Debug.Log(ap.Key + " - "+ ap.Description);
+                            Debug.Warn(ap.Key + " - "+ ap.Description);
                         }
                     }
                 }

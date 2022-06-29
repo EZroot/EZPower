@@ -39,7 +39,10 @@ namespace EZPower
                 {
                     dynamic program = CLIParser.ParseCreateFeature(Reflect.GetClassFullName(CLIParser.ParseFeatureName(inputText)));
                     //key command and parameters
-                    try { CLIParser.ParseFeatureArgs(inputText, program); } catch { Debug.Error("Error: " + inputText); }
+                    try {
+                        CLI.Print(CLIParser.ParseFeatureName(inputText) + ":> ", ConsoleColor.Yellow, false);
+                        CLI.Print(CLIParser.ParseFeatureArgs(inputText, program),ConsoleColor.White); } catch { Debug.Error("Error: " + inputText); 
+                    }
                 }
             }
         }
@@ -57,8 +60,6 @@ namespace EZPower
 
             CLIParser.ParseImmediateCommand("clear", cliText, ClearCLI);
             CLIParser.ParseImmediateCommand("cls", cliText, ClearCLI);
-
-            CLIParser.ParseImmediateCommand("test", cliText, TestJson);
         }
 
         void ShowIPAddress()
@@ -85,49 +86,6 @@ namespace EZPower
 
             CLI.Print("clear", System.ConsoleColor.Green, false);
             CLI.Print(" - Clears console screen", System.ConsoleColor.Yellow);
-
-            CLI.Print("test", System.ConsoleColor.Green, false);
-            CLI.Print(" - Try out the latest crazy", System.ConsoleColor.Yellow);
-        }
-
-        void InitUserProfile()
-        {
-            _profile = (UserProfile)CLIParser.LoadJsonObject<UserProfile>(typeof(UserProfile).Name+".ezdat");
-            if (_profile == null)
-            {
-                CreateUserProfile();
-            }
-            CLI.DefaultPrefix = _profile.ConsolePrefix;
-        }
-
-        void CreateUserProfile()
-        {
-            CLI.Print("New User: ", false);
-            string user = Console.ReadLine();
-
-            CLI.Print("Prefix: ", false);
-            string prefix = Console.ReadLine();
-
-            _profile = new UserProfile(user, Directory.GetCurrentDirectory(), prefix, NetPower.GetLocalIpAddress().ToString());
-            _profile.SaveGameData<UserProfile>(_profile, typeof(UserProfile).Name + ".ezdat");
-            CLI.Print("User profile [" + user + "] created!");
-            CLI.DefaultPrefix = _profile.ConsolePrefix;
-        }
-
-        void ShowUserProfile()
-        {
-            CLI.Print(_profile.UserName);
-            CLI.Print(_profile.ConsolePrefix);
-            CLI.Print(_profile.CurrentPath);
-            CLI.Print(_profile.CurrentIP);
-        }
-
-        void TestJson()
-        {
-            //PlayerData data = new PlayerData(new PlayerProfileStats("dillon", 100, 100), new PlayerCombatStats(1, 1, 1, 1), new PlayerHistoryStats(0, "", 0, 0, 0, 0), new PlayerMoneyStats(0, 0));
-            ShipateerData data = new ShipateerData();
-
-            CLI.Print(CLIParser.ToJson(data));
         }
 
         void ShowAvailableFeatures()
@@ -141,16 +99,16 @@ namespace EZPower
                 for(int i =0; i < info.HelpArgs.Length;i++)
                 {
                     CLI.Print("  ", false);
-                    CLI.Print("-"+info.HelpArgs[i].Key, System.ConsoleColor.Cyan, false);
+                    CLI.Print("-"+info.HelpArgs[i].Key, System.ConsoleColor.Yellow, false);
 
                     if (info.HelpArgs[i].Parameters.Length != 0)
                     {
                         for (int j = 0; j < info.HelpArgs[i].Parameters.Length; j++)
                         {
-                            CLI.Print(" "+ info.HelpArgs[i].Parameters[j], System.ConsoleColor.Cyan, false);
+                            CLI.Print(" "+ info.HelpArgs[i].Parameters[j], System.ConsoleColor.DarkYellow, false);
                         }
                     }
-                    CLI.Print(" : " + info.HelpArgs[i].Description, System.ConsoleColor.DarkCyan, true);
+                    CLI.Print(" : " + info.HelpArgs[i].Description, System.ConsoleColor.White, true);
                 }
             }
         }
@@ -165,5 +123,37 @@ namespace EZPower
         {
             CLI.Print("[------------------------< EZ Tools >------------------------]", System.ConsoleColor.DarkYellow);
         }
+
+        void InitUserProfile()
+        {
+            _profile = (UserProfile)CLIParser.LoadJsonObject<UserProfile>(typeof(UserProfile).Name);
+            if (_profile == null)
+            {
+                CreateUserProfile();
+            }
+            CLI.DefaultPrefix = _profile.UserName + "@" + NetPower.GetLocalIpAddress() + _profile.ConsolePrefix;
+        }
+
+        void CreateUserProfile()
+        {
+            CLI.Print("New User: ", false);
+            string user = Console.ReadLine();
+
+            CLI.Print("Prefix: ", false);
+            string prefix = Console.ReadLine();
+
+            _profile = new UserProfile(user, Directory.GetCurrentDirectory(), prefix, NetPower.GetLocalIpAddress().ToString());
+            _profile.SaveGameData<UserProfile>(_profile, typeof(UserProfile).Name);
+            CLI.Print("User profile [" + user + "] created!");
+        }
+
+        void ShowUserProfile()
+        {
+            CLI.Print(_profile.UserName);
+            CLI.Print(_profile.ConsolePrefix);
+            CLI.Print(_profile.CurrentPath);
+            CLI.Print(_profile.CurrentIP);
+        }
+
     }
 }

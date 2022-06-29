@@ -5,8 +5,8 @@ using EZPower.Core.CLIParser;
 
 namespace EZPower.ProgramFeatures.WindowsCmd
 {
-    [ProgramFeature("Cmd", "Access to cmd.")]
-    public class Cmd : ProgramFeature, IProgramFeature
+    [ProgramFeature("CMD", "Access to cmd.")]
+    public class CMD : ProgramFeature, IProgramFeature
     {
         [ProgramFeatureArgs("ShowHelpText", 'h', "Show available help commands.")]
         public void ShowHelpText()
@@ -15,7 +15,7 @@ namespace EZPower.ProgramFeatures.WindowsCmd
         }
 
         [ProgramFeatureArgs("StartCmd", 'c', "Try cmd", "args0")]
-        public void StartCmd(string args0)
+        public string StartCmd(string args0)
         {
             System.Diagnostics.Process cmd = new System.Diagnostics.Process();
             cmd.StartInfo.FileName = "cmd.exe";
@@ -29,7 +29,7 @@ namespace EZPower.ProgramFeatures.WindowsCmd
             cmd.StandardInput.Flush();
             cmd.StandardInput.Close();
             cmd.WaitForExit();
-            CLI.Print(cmd.StandardOutput.ReadToEnd());
+            return (cmd.StandardOutput.ReadToEnd());
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using EZPower.Core.CLIParser;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -24,14 +25,37 @@ namespace EZPower.ProgramFeatures
 
         }
 
-        public object LoadGameData<T>(string featureName) 
+        public T InitFeatureData<T>(T defaultData)
         {
-            return CLIParser.LoadJsonObject<T>(featureName + ".ezdat");
+            T result = (T)CLIParser.LoadJsonObject<T>(typeof(T).Name);
+            if (result == null)
+            {
+                result = CreateFeatureData<T>(defaultData);
+            }
+            return result;
         }
 
-        public void SaveGameData<T>(T data, string featureName)
+        T CreateFeatureData<T>(T defaultData)
         {
-            CLIParser.SaveJson(CLIParser.ToJson(data), featureName + ".ezdat");
+            T data = defaultData;
+            SaveGameData<T>(data);
+            CLI.Print("Feature data [" + typeof(T).Name + "] created!");
+            return data;
+        }
+
+        public void SaveGameData<T>(T data)
+        {
+            SaveJsonData<T>(data, typeof(T).Name);
+        }
+
+        public T LoadGameData<T>(string featureName) 
+        {
+            return (T)((object)CLIParser.LoadJsonObject<T>(featureName));
+        }
+
+        void SaveJsonData<T>(T data, string featureName)
+        {
+            CLIParser.SaveJson(CLIParser.ToJson(data), featureName);
         }
 
         public void GetHelpText()
