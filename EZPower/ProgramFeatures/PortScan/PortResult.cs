@@ -4,8 +4,9 @@ using System.Text;
 
 namespace EZPower.ProgramFeatures
 {
-    public interface IProgramFeature : IDisposable
+    public struct PortResult
     {
-        void ShowHelpText();
+        public bool IsOpened;
+        public string Result;
     }
 }

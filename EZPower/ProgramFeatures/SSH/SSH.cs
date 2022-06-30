@@ -13,5 +13,10 @@ namespace EZPower.ProgramFeatures.SSAysh
             base.GetHelpText();
         }
 
+        public void Dispose()
+        {
+            Debug.Warn("Disposted of " + GetType().Name);
+            GC.Collect();
+        }
     }
 }

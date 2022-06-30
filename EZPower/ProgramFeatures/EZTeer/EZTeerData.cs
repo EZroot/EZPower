@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EZPower.ProgramFeatures.Shipateer
+namespace EZPower.ProgramFeatures
 {
     [System.Serializable]
-    public class ShipateerData : ProgramData
+    public class EZTeerData : ProgramData
     {
         Player player = new Player(
     new PlayerProfileStats("Dillon", 100, 10),

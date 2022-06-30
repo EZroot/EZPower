@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace EZPower.ProgramFeatures
 {
-    public class ProgramFeature 
+    public class ProgramFeature
     {
-
         public virtual void Start()
         {
 

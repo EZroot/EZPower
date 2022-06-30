@@ -18,5 +18,11 @@ namespace EZPower.ProgramFeatures.EZFTP
         {
             return derp;
         }
+
+        public void Dispose()
+        {
+            Debug.Warn("Disposted of " + GetType().Name);
+            GC.Collect();
+        }
     }
 }

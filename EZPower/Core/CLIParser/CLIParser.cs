@@ -59,7 +59,7 @@ namespace EZPower.Core.CLIParser
             string[] res = cliText.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             foreach(string s in res)
             {
-                if(s.ToLower().Contains(command.ToLower()))
+                if(s.ToLower()==(command.ToLower()))
                 {
                     function.Invoke();
                     break;
@@ -68,12 +68,19 @@ namespace EZPower.Core.CLIParser
         }
         public static object ParseCreateFeature(string featureName)
         {
+            Debug.Error(featureName);
             return Activator.CreateInstance(Type.GetType(featureName));
         }
 
         public static string ParseFeatureName(string cliText)
         {
-            return cliText.Split(' ', StringSplitOptions.RemoveEmptyEntries)[0];
+            string[] f = cliText.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            string result = "";
+            if (f.Length > 0)
+            {
+                result = f[0];
+            }
+            return result;
         }
 
         public static string ParseFeatureArgs(string cliText, dynamic feature)
@@ -87,15 +94,28 @@ namespace EZPower.Core.CLIParser
                 //key
                 if (args[i].Contains('-'))
                 {
+                    Debug.Log("key: "+args[i]);
                     List<string> parameters = new List<string>();
+
                     //gather params
                     for(int j = i+1;j<args.Length;j++)
                     {
+                        Debug.Log("params: " + j);
                         if(args[j].Contains('-'))
                         {
                             break;
                         }
-                        parameters.Add(args[j]);
+
+                        Debug.Warn("this is gonna mess up with multiple keys!");
+                        //
+                        if (j == args.Length - 1 || args[j + 1].Contains('-'))
+                        {
+                            parameters.Add(args[j]);
+                        }
+                        else
+                        {
+                            parameters.Add(args[j] + ',');
+                        }
                     }
                     //2nd character in our 'key' (eg. -p will now be p)
                     keyAndParams.Add(args[i][1], parameters);
@@ -109,25 +129,67 @@ namespace EZPower.Core.CLIParser
             string featureName = ParseFeatureName(cliText);
             foreach(ProgramFeatureInfo i in info)
             {
+                Debug.Error("Count");
                 if (i.ProgramName.ToLower().Contains(featureName.ToLower()))
                 {
+                    Debug.Log("Program : " + i.ProgramName);
+
                     //foreach method
-                    foreach(ProgramFeatureHelpInfo hi in i.HelpArgs)
+                    foreach (ProgramFeatureHelpInfo hi in i.HelpArgs)
                     {
+                        Debug.Log("Function: "+hi.Function.ToString());
                         //foreach key and params
                         foreach(KeyValuePair<char,List<string>> kvp in keyAndParams)
                         {
                             //if keys match
-                            if(hi.Key==kvp.Key)
+                            if (hi.Key==kvp.Key)
                             {
-                                res += (string)hi.Function.Invoke(feature, kvp.Value.ToArray());
+                                Debug.Log("matching key! invoking... " + kvp.Value.Count);
+                                //no args
+                                if (kvp.Value.Count >= 1)
+                                {
+                                    //if we dont need args, just run
+                                    if (hi.FunctionParameterType.ToLower().Contains("string[]"))
+                                    {
+                                        Debug.Warn("trying to invoke multiple params");
+                                        res += (string)hi.Function.Invoke(feature, new object[] { kvp.Value.ToArray() });
+                                    }
+                                    else
+                                    {
+
+                                        Debug.Warn("trying to invoke DEFAULT params");
+                                        res += (string)hi.Function.Invoke(feature, new object[] { kvp.Value[0] });
+                                    }
+                                }
+                                else
+                                {
+
+                                    if (hi.FunctionParameterType.ToLower().Contains("string[]"))
+                                    {
+                                        Debug.Warn("trying to invoke multiple params");
+                                        res += (string)hi.Function.Invoke(feature, new object[] { kvp.Value.ToArray() });
+                                    }
+                                    else if (hi.FunctionParameterType.ToLower().Contains("string"))
+                                    {
+
+                                        Debug.Warn("trying to invoke DEFAULT params");
+                                        res += (string)hi.Function.Invoke(feature, new object[] { null });
+                                    }
+                                    else
+                                    {
+
+                                        Debug.Warn("trying to invoke no params");
+                                        res += (string)hi.Function.Invoke(feature, null);
+                                    }
+
+                                }
+                                res += " ";
                                 continue;
                             }
                         }
                     }
                 }
             }
-
             return res;
         }
     }

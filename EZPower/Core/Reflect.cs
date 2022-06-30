@@ -10,6 +10,7 @@ namespace EZPower
         public string Description;
         public string[] Parameters;
         public MethodInfo Function;
+        public string FunctionParameterType;
     }
     public struct ProgramFeatureInfo
     {
@@ -41,11 +42,21 @@ namespace EZPower
                             ProgramFeatureArgsAttribute[] featureArgs = (ProgramFeatureArgsAttribute[])member.GetCustomAttributes(typeof(ProgramFeatureArgsAttribute));
                             foreach (ProgramFeatureArgsAttribute args in featureArgs)
                             {
-                                ProgramFeatureHelpInfo helpinfo = new ProgramFeatureHelpInfo { Key = args.Key, 
+                                ParameterInfo[] allparams = member.GetParameters();
+                                string paramType = "null";
+                                if (allparams.Length > 0)
+                                {
+                                    paramType = allparams[0].ParameterType.ToString();
+                                }
+                                ProgramFeatureHelpInfo helpinfo = new ProgramFeatureHelpInfo { 
+                                    Key = args.Key,
                                     Description = args.Description,
                                     Function = member,
-                                    Parameters = args.Parameters};
+                                    Parameters = args.Parameters,
+                                    FunctionParameterType = paramType
+                                };
 
+                                Debug.Error(member.Name + " - "+paramType);
                                 featureHelpList.Add(helpinfo);
                             }
                         }
@@ -60,6 +71,8 @@ namespace EZPower
 
         public static bool DoesFeatureExist(string featureName)
         {
+            if (featureName.Length == 0) { return false; }
+
             ProgramFeatureInfo[] info = Reflect.GetAllProgramFeatures();
             foreach (ProgramFeatureInfo i in info)
             {

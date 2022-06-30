@@ -31,5 +31,11 @@ namespace EZPower.ProgramFeatures.WindowsCmd
             cmd.WaitForExit();
             return (cmd.StandardOutput.ReadToEnd());
         }
+
+        public void Dispose()
+        {
+            Debug.Warn("Disposted of " + GetType().Name);
+            GC.Collect();
+        }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using EZPower.Core.CLIParser;
 using EZPower.Core.NetPower;
 using EZPower.ProgramFeatures;
-using EZPower.ProgramFeatures.Shipateer;
 using System;
 using System.IO;
 
@@ -37,11 +36,24 @@ namespace EZPower
 
                 if (Reflect.DoesFeatureExist(CLIParser.ParseFeatureName(inputText)))
                 {
-                    dynamic program = CLIParser.ParseCreateFeature(Reflect.GetClassFullName(CLIParser.ParseFeatureName(inputText)));
-                    //key command and parameters
-                    try {
-                        CLI.Print(CLIParser.ParseFeatureName(inputText) + ":> ", ConsoleColor.Yellow, false);
-                        CLI.Print(CLIParser.ParseFeatureArgs(inputText, program),ConsoleColor.White); } catch { Debug.Error("Error: " + inputText); 
+                    using (dynamic program = CLIParser.ParseCreateFeature(Reflect.GetClassFullName(CLIParser.ParseFeatureName(inputText))))
+                    {
+                        //key command and parameters
+                        try
+                        {
+                            /*
+                             * for multiple features i should try method(params string[] derp) to see if that works?
+                             * cause it is getting all the params, so wtf
+                             * maybe i need to add comma seperators as well (pretty sure this is the cause actually)
+                             */
+                            CLI.Print(CLIParser.ParseFeatureName(inputText) + ":> ", ConsoleColor.Yellow, false);
+                            CLI.Print(CLIParser.ParseFeatureArgs(inputText, program), ConsoleColor.Green);
+                        }
+                        catch(Exception e)
+                        {
+                            Debug.Error("[Error] " + inputText + " : "+e.Message);
+                        }
+
                     }
                 }
             }

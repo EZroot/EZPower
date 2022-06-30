@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EZPower.ProgramFeatures.Shipateer
+namespace EZPower.ProgramFeatures
 {
     //[ProgramHelper('b', "Buy a business")]
     //[ProgramHelper('o', "Run for office")]
@@ -15,11 +15,11 @@ namespace EZPower.ProgramFeatures.Shipateer
     [ProgramFeature("EZTeer", "Little minigame for fun.")]
     public class EZTeer : ProgramFeature, IProgramFeature
     {
-        ShipateerData _programData;
+        EZTeerData _programData;
 
         public override void Start()
         {
-            _programData = new ShipateerData();
+            _programData = new EZTeerData();
         }
 
         [ProgramFeatureArgs("ShowHelpText", 'h',"Show a list of commands")]
@@ -28,23 +28,16 @@ namespace EZPower.ProgramFeatures.Shipateer
             base.GetHelpText();
         }
 
-        [ProgramFeatureArgs("SaveJsonData", 's', "Save data")]
-        public void SaveJsonData()
-        {
-            SaveGameData(_programData);
-        }
-
-        [ProgramFeatureArgs("LoadJsonData", 'l', "Load data")]
-        public void LoadJsonData()
-        {
-            ShipateerData da = (ShipateerData)base.LoadGameData<ShipateerData>(GetType().Name);
-            da.Player.ShowPlayerStats();
-        }
-
         [ProgramFeatureArgs("BuyBusiness",'b',"Buy a local business", "businessName")]
         public void BuyBusiness(string businessName)
         {
             CLI.Print("Business bought! "+businessName);
+        }
+
+        public void Dispose()
+        {
+            Debug.Warn("Disposted of " + GetType().Name);
+            GC.Collect();
         }
 
     }

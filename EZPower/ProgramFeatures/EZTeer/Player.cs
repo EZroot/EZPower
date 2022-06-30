@@ -4,7 +4,7 @@ using System.Text;
 using EZPower.Core.CLIParser;
 using Newtonsoft.Json;
 
-namespace EZPower.ProgramFeatures.Shipateer
+namespace EZPower.ProgramFeatures
 {
     public class Player
     {
