@@ -50,6 +50,21 @@ namespace EZPower.ProgramFeatures
             return "Port set: " + port;
         }
 
+        [ProgramFeatureArgs("TestMeDaddy", 'g', "asdasdasd", "works[]")]
+        public string TestMeDaddy(params string[] lol)
+        {
+            string result = "";
+            if (lol == null || lol.Length == 0)
+            {
+                return result;
+            }
+            foreach (string s in lol)
+            {
+                result += ("Wow: " + s+" ");
+            }
+            return result;
+        }
+
         [ProgramFeatureArgs("ScanPort", 's', "Scan default ip (if empty) or specific ip:port or portA-portB", "value")]
         public string ScanPort(string ipport)
         {
@@ -112,7 +127,7 @@ namespace EZPower.ProgramFeatures
                 multipleResult.Add(res);
             }
 
-            return "Scanned "+ip+":"+port;
+            return "Finished scanning "+ip;
         }
 
         [ProgramFeatureArgs("PingIp", 'n', "Ping ip", "ipaddress")]

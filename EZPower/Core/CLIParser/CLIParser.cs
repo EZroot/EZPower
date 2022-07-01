@@ -98,24 +98,16 @@ namespace EZPower.Core.CLIParser
                     List<string> parameters = new List<string>();
 
                     //gather params
-                    for(int j = i+1;j<args.Length;j++)
+                    for (int j = i + 1; j < args.Length; j++)
                     {
                         Debug.Log("params: " + j);
-                        if(args[j].Contains('-'))
+                        if (args[j].Contains('-'))
                         {
                             break;
                         }
 
-                        Debug.Warn("this is gonna mess up with multiple keys!");
-                        //
-                        if (j == args.Length - 1 || args[j + 1].Contains('-'))
-                        {
-                            parameters.Add(args[j]);
-                        }
-                        else
-                        {
-                            parameters.Add(args[j] + ',');
-                        }
+                        parameters.Add(args[j]);
+
                     }
                     //2nd character in our 'key' (eg. -p will now be p)
                     keyAndParams.Add(args[i][1], parameters);

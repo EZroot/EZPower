@@ -42,7 +42,7 @@ namespace EZPower
                         try
                         {
                             CLI.Print(CLIParser.ParseFeatureName(inputText) + ":> ", ConsoleColor.Yellow, false);
-                            CLI.Print(CLIParser.ParseFeatureArgs(inputText, program), ConsoleColor.Green);
+                            CLI.Print(CLIParser.ParseFeatureArgs(inputText, program), ConsoleColor.DarkCyan);
                         }
                         catch(Exception e)
                         {

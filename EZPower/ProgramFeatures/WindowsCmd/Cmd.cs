@@ -14,8 +14,8 @@ namespace EZPower.ProgramFeatures.WindowsCmd
             base.GetHelpText();
         }
 
-        [ProgramFeatureArgs("StartCmd", 'c', "Try cmd", "args0")]
-        public string StartCmd(string args0)
+        [ProgramFeatureArgs("ExecuteCmdArgs", 'c', "Execute cmd args", "args0")]
+        public string ExecuteCmdArgs(params string[] args0)
         {
             System.Diagnostics.Process cmd = new System.Diagnostics.Process();
             cmd.StartInfo.FileName = "cmd.exe";
@@ -25,7 +25,13 @@ namespace EZPower.ProgramFeatures.WindowsCmd
             cmd.StartInfo.UseShellExecute = false;
             cmd.Start();
 
-            cmd.StandardInput.WriteLine(args0);
+            string res = "";
+            foreach(string s in args0)
+            {
+                res += s + " ";
+            }
+            cmd.StandardInput.WriteLine(res);
+
             cmd.StandardInput.Flush();
             cmd.StandardInput.Close();
             cmd.WaitForExit();
