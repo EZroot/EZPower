@@ -50,41 +50,69 @@ namespace EZPower.ProgramFeatures
             return "Port set: " + port;
         }
 
-        [ProgramFeatureArgs("TestMeDaddy", 'g', "asdasdasd", "works[]")]
-        public string TestMeDaddy(params string[] lol)
-        {
-            string result = "";
-            if (lol == null ||  lol.Length==0)
-            {
-                return result;
-            }
-            foreach(string s in lol)
-            {
-                result+=("Wow: "+s);
-            }
-            return result;
-        }
-
-        [ProgramFeatureArgs("ScanPort", 's', "Scan ip", "[ip:port]")]
+        [ProgramFeatureArgs("ScanPort", 's', "Scan default ip (if empty) or specific ip:port or portA-portB", "value")]
         public string ScanPort(string ipport)
         {
-            PortResult result;
-            string ip;
-            string port;
-            
-            if (ipport != null && ipport != "" && ipport.Split(":", StringSplitOptions.RemoveEmptyEntries).Length >1)
+            //we dont need this
+            //but maybe we will later..?
+            List<PortResult> multipleResult = new List<PortResult>();
+            string ip = "";
+            string port = "";
+            if (ipport != null && ipport != "" && ipport.Split("~",StringSplitOptions.RemoveEmptyEntries).Length>0)
+            {
+                string[] portDelta = ipport.Split("~", StringSplitOptions.RemoveEmptyEntries);
+
+                int portA = int.Parse(portDelta[0]);
+                int portB = int.Parse(portDelta[1]);
+
+                ip = _portScanData.Ip;
+                for (int i = portA; i <= portB; i++)
+                {
+                    port = i.ToString();
+                    PortResult res = ScanPortResult(ip, port);
+                    if (res.IsOpened)
+                    {
+                        CLI.Print("Port " + port + ":>" + res.Result, ConsoleColor.Green);
+                    }
+                    else
+                    {
+                        CLI.Print("Port " + port + " : " + res.Result, ConsoleColor.Red);
+                    }
+                    multipleResult.Add(res);
+                }
+            }
+            else if (ipport != null && ipport != "" && ipport.Split(":", StringSplitOptions.RemoveEmptyEntries).Length >1)
             {
                 ip = ipport.Split(":", StringSplitOptions.RemoveEmptyEntries)[0];
                 port = ipport.Split(":", StringSplitOptions.RemoveEmptyEntries)[1];
-                result = ScanPortResult(ip, port);
+                PortResult res = ScanPortResult(ip, port);
+                if (res.IsOpened)
+                {
+                    CLI.Print("Port " + port + ":>" + res.Result, ConsoleColor.Green);
+                }
+                else
+                {
+                    CLI.Print("Port " + port + " : " + res.Result, ConsoleColor.Red);
+                }
+                multipleResult.Add(res);
             }
             else
             {
                 port = _portScanData.Port;
                 ip = _portScanData.Ip;
-                result = ScanPortResult(_portScanData.Ip, _portScanData.Port);
+                PortResult res = ScanPortResult(ip, port);
+                if (res.IsOpened)
+                {
+                    CLI.Print("Port " + port + ":>" + res.Result, ConsoleColor.Green);
+                }
+                else
+                {
+                    CLI.Print("Port " + port + " : " + res.Result, ConsoleColor.Red);
+                }
+                multipleResult.Add(res);
             }
-            return ip+":"+port+" ~ "+result.IsOpened+" Result: " + result.Result;
+
+            return "Scanned "+ip+":"+port;
         }
 
         [ProgramFeatureArgs("PingIp", 'n', "Ping ip", "ipaddress")]
@@ -121,7 +149,7 @@ namespace EZPower.ProgramFeatures
                         Debug.Error("Socket: failed to connect to "+ip+":"+port);
                     }
                     result.IsOpened = false;
-                    result.Result = ip+":"+port+" - " +ex.Message;
+                    result.Result = ex.Message;
                 }
                 finally
                 {

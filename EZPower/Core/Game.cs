@@ -41,11 +41,6 @@ namespace EZPower
                         //key command and parameters
                         try
                         {
-                            /*
-                             * for multiple features i should try method(params string[] derp) to see if that works?
-                             * cause it is getting all the params, so wtf
-                             * maybe i need to add comma seperators as well (pretty sure this is the cause actually)
-                             */
                             CLI.Print(CLIParser.ParseFeatureName(inputText) + ":> ", ConsoleColor.Yellow, false);
                             CLI.Print(CLIParser.ParseFeatureArgs(inputText, program), ConsoleColor.Green);
                         }

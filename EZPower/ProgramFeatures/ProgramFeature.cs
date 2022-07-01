@@ -70,16 +70,16 @@ namespace EZPower.ProgramFeatures
                     for (int i = 0; i < info.HelpArgs.Length; i++)
                     {
                         CLI.Print("  ", false);
-                        CLI.Print("-" + info.HelpArgs[i].Key, System.ConsoleColor.Cyan, false);
+                        CLI.Print("-" + info.HelpArgs[i].Key, System.ConsoleColor.Yellow, false);
 
                         if (info.HelpArgs[i].Parameters.Length != 0)
                         {
                             for (int j = 0; j < info.HelpArgs[i].Parameters.Length; j++)
                             {
-                                CLI.Print(" " + info.HelpArgs[i].Parameters[j], System.ConsoleColor.Cyan, false);
+                                CLI.Print(" " + info.HelpArgs[i].Parameters[j], System.ConsoleColor.DarkYellow, false);
                             }
                         }
-                        CLI.Print(" : " + info.HelpArgs[i].Description, System.ConsoleColor.DarkCyan, true);
+                        CLI.Print(" : " + info.HelpArgs[i].Description, System.ConsoleColor.White, true);
                     }
                 }
             }
