@@ -56,7 +56,7 @@ namespace EZPower
                                     FunctionParameterType = paramType
                                 };
 
-                                Debug.Error(member.Name + " - "+paramType);
+                                //Debug.Error(member.Name + " - "+paramType);
                                 featureHelpList.Add(helpinfo);
                             }
                         }

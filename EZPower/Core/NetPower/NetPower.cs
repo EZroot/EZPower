@@ -4,7 +4,7 @@ using System.Text;
 using System.Net.Sockets;
 using System.Net;
 
-namespace EZPower.Core.NetPower
+namespace EZPower
 {
     public static class NetPower
     {
@@ -20,6 +20,7 @@ namespace EZPower.Core.NetPower
             }
             return null;
         }
+
         public static IPAddress[] GetLocalIpAddresses()
         {
             List<IPAddress> addresses = new List<IPAddress>();

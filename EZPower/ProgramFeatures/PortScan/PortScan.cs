@@ -1,6 +1,4 @@
-﻿using EZPower.Core.CLIParser;
-using EZPower.Core.NetPower;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
@@ -25,7 +23,7 @@ namespace EZPower.ProgramFeatures
 
         public PortScan()
         {
-            _portScanData = InitFeatureData<PortScanData>(new PortScanData("127.0.0.1","1337"));
+            _portScanData = InitFeatureData(new PortScanData("127.0.0.1","1337"));
         }
 
         [ProgramFeatureArgs("ShowHelpText", 'h', "Show a list of commands")]
@@ -71,63 +69,77 @@ namespace EZPower.ProgramFeatures
             //we dont need this
             //but maybe we will later..?
             List<PortResult> multipleResult = new List<PortResult>();
-            string ip = "";
-            string port = "";
-            if (ipport != null && ipport != "" && ipport.Split("~",StringSplitOptions.RemoveEmptyEntries).Length>0)
+
+            if (ipport != null && ipport != "" && ipport.Contains("~"))
             {
                 string[] portDelta = ipport.Split("~", StringSplitOptions.RemoveEmptyEntries);
 
                 int portA = int.Parse(portDelta[0]);
                 int portB = int.Parse(portDelta[1]);
 
-                ip = _portScanData.Ip;
                 for (int i = portA; i <= portB; i++)
                 {
-                    port = i.ToString();
-                    PortResult res = ScanPortResult(ip, port);
+                    _portScanData.Port = i.ToString();
+
+                    PortResult res = ScanPortResult(_portScanData.Ip, _portScanData.Port);
                     if (res.IsOpened)
                     {
-                        CLI.Print("Port " + port + ":>" + res.Result, ConsoleColor.Green);
+                        CLI.Print("["+_portScanData.Ip + ":" + _portScanData.Port + "] " + res.Result, ConsoleColor.Green);
                     }
                     else
                     {
-                        CLI.Print("Port " + port + " : " + res.Result, ConsoleColor.Red);
+                        CLI.Print("[" + _portScanData.Ip + ":" + _portScanData.Port + "] " + res.Result, ConsoleColor.Red);
                     }
                     multipleResult.Add(res);
                 }
             }
-            else if (ipport != null && ipport != "" && ipport.Split(":", StringSplitOptions.RemoveEmptyEntries).Length >1)
+            else if (ipport != null && ipport != "" && ipport.Contains(":"))
             {
-                ip = ipport.Split(":", StringSplitOptions.RemoveEmptyEntries)[0];
-                port = ipport.Split(":", StringSplitOptions.RemoveEmptyEntries)[1];
-                PortResult res = ScanPortResult(ip, port);
+                _portScanData.Ip = ipport.Split(":", StringSplitOptions.RemoveEmptyEntries)[0];
+                _portScanData.Port = ipport.Split(":", StringSplitOptions.RemoveEmptyEntries)[1];
+                SaveGameData(_portScanData);
+
+                PortResult res = ScanPortResult(_portScanData.Ip, _portScanData.Port);
                 if (res.IsOpened)
                 {
-                    CLI.Print("Port " + port + ":>" + res.Result, ConsoleColor.Green);
+                    CLI.Print("[" + _portScanData.Ip + ":" + _portScanData.Port + "] " + res.Result, ConsoleColor.Green);
                 }
                 else
                 {
-                    CLI.Print("Port " + port + " : " + res.Result, ConsoleColor.Red);
+                    CLI.Print("[" + _portScanData.Ip + ":" + _portScanData.Port + "] " + res.Result, ConsoleColor.Red);
+                }
+                multipleResult.Add(res);
+            }
+            else if(ipport != null && ipport != "")
+            {
+                _portScanData.Port = ipport;
+                SaveGameData(_portScanData);
+                PortResult res = ScanPortResult(_portScanData.Ip, _portScanData.Port);
+                if (res.IsOpened)
+                {
+                    CLI.Print("[" + _portScanData.Ip + ":" + _portScanData.Port + "] " + res.Result, ConsoleColor.Green);
+                }
+                else
+                {
+                    CLI.Print("[" + _portScanData.Ip + ":" + _portScanData.Port + "] " + res.Result, ConsoleColor.Red);
                 }
                 multipleResult.Add(res);
             }
             else
             {
-                port = _portScanData.Port;
-                ip = _portScanData.Ip;
-                PortResult res = ScanPortResult(ip, port);
+                PortResult res = ScanPortResult(_portScanData.Ip, _portScanData.Port);
                 if (res.IsOpened)
                 {
-                    CLI.Print("Port " + port + ":>" + res.Result, ConsoleColor.Green);
+                    CLI.Print("[" + _portScanData.Ip + ":" + _portScanData.Port + "] " + res.Result, ConsoleColor.Green);
                 }
                 else
                 {
-                    CLI.Print("Port " + port + " : " + res.Result, ConsoleColor.Red);
+                    CLI.Print("[" + _portScanData.Ip + ":" + _portScanData.Port + "] " + res.Result, ConsoleColor.Red);
                 }
                 multipleResult.Add(res);
             }
 
-            return "Finished scanning "+ip;
+            return "Finished scanning "+ _portScanData.Ip+":"+_portScanData.Port;
         }
 
         [ProgramFeatureArgs("PingIp", 'n', "Ping ip", "ipaddress")]
@@ -142,20 +154,43 @@ namespace EZPower.ProgramFeatures
             return "Ping " + result;
         }
 
+        [ProgramFeatureArgs("ShowCurrentData", 'g', "Show current ip:port")]
+        public string ShowCurrentData()
+        {
+            string result = _portScanData.Ip +":"+_portScanData.Port;
+            return "Data -> " + result;
+        }
 
         PortResult ScanPortResult(string ip, string port)
         {
             PortResult result = new PortResult { IsOpened = false, Result = "none" };
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+
             IPAddress ipAddress;
             int realPort;
             try
             {
                 int.TryParse(port, out realPort);
                 IPAddress.TryParse(ip, out ipAddress);
+
+                _portScanData.Port = realPort.ToString();
+                _portScanData.Ip = ipAddress.ToString();
+                SaveGameData(_portScanData);
                 try
                 {
-                    socket?.Connect(ipAddress, realPort);
+
+                    var rr = socket.BeginConnect(ipAddress, realPort, null,null);
+                    bool success = rr.AsyncWaitHandle.WaitOne(3000, true);
+                    if (success)
+                    {
+                        result.IsOpened = true;
+                        result.Result = "Opened -> " + _portScanData.Ip + ":" + realPort;
+                    }
+                    else
+                    {
+                        result.IsOpened = false;
+                        result.Result = "Closed -> " + _portScanData.Ip + ":" + realPort;
+                    }
                 }
                 catch (SocketException ex)
                 {
@@ -164,7 +199,7 @@ namespace EZPower.ProgramFeatures
                         Debug.Error("Socket: failed to connect to "+ip+":"+port);
                     }
                     result.IsOpened = false;
-                    result.Result = ex.Message;
+                    result.Result = "Closed -> "+_portScanData.Ip+":"+realPort;
                 }
                 finally
                 {
@@ -183,7 +218,7 @@ namespace EZPower.ProgramFeatures
 
         public void Dispose()
         {
-            //Debug.Warn("Disposted of "+GetType().Name);
+            Debug.Warn("Disposed of "+GetType().Name);
             GC.Collect();
         }
     }

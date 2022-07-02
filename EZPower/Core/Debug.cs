@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace EZPower
 {
@@ -14,6 +16,11 @@ namespace EZPower
                 return;
             }
             PreMessage();
+
+            MethodBase methodInfo = new StackTrace().GetFrame(1).GetMethod();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("[" + methodInfo.ReflectedType.Name + "] ");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(msg);
         }
 
@@ -24,6 +31,11 @@ namespace EZPower
                 return;
             }
             PreMessage();
+
+            MethodBase methodInfo = new StackTrace().GetFrame(1).GetMethod();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("[" + methodInfo.ReflectedType.Name + "] ");
+            Console.ForegroundColor = ConsoleColor.White;
             if (singleLine)
             {
                 Console.WriteLine(msg);
@@ -41,6 +53,11 @@ namespace EZPower
                 return;
             }
             PreMessage();
+
+            MethodBase methodInfo = new StackTrace().GetFrame(1).GetMethod();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("[" + methodInfo.ReflectedType.Name + "] ");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine(msg);
             Console.ForegroundColor = ConsoleColor.White;
@@ -53,6 +70,11 @@ namespace EZPower
                 return;
             }
             PreMessage();
+
+            MethodBase methodInfo = new StackTrace().GetFrame(1).GetMethod();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("[" + methodInfo.ReflectedType.Name + "] ");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(msg);
             Console.ForegroundColor = ConsoleColor.White;
@@ -65,6 +87,11 @@ namespace EZPower
                 return;
             }
             PreMessage();
+
+            MethodBase methodInfo = new StackTrace().GetFrame(1).GetMethod();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("[" + methodInfo.ReflectedType.Name + "] ");
+            Console.ForegroundColor = ConsoleColor.White;
             Console.ForegroundColor = color;
             Console.WriteLine(msg);
             Console.ForegroundColor = ConsoleColor.White;
@@ -77,6 +104,12 @@ namespace EZPower
                 return;
             }
             PreMessage();
+
+            MethodBase methodInfo = new StackTrace().GetFrame(1).GetMethod();
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.Write("[" + methodInfo.ReflectedType.Name + "] ");
+            Console.ForegroundColor = ConsoleColor.White;
+
             Console.ForegroundColor = color;
             if(singleLine)
             {
@@ -103,7 +136,7 @@ namespace EZPower
         {
             if (ShowCurrentTime)
             {
-                Console.Write("[" + DateTime.Now + "] ");
+                Console.Write("[" + DateTime.Now.ToLongTimeString() + "] ");
             }
         }
     }

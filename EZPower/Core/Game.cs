@@ -1,7 +1,4 @@
-﻿using EZPower.Core.CLIParser;
-using EZPower.Core.NetPower;
-using EZPower.ProgramFeatures;
-using System;
+﻿using System;
 using System.IO;
 
 namespace EZPower
@@ -14,8 +11,17 @@ namespace EZPower
      */
     public class Game
     {
-        public Game()
+        string[] _args;
+        public Game(string[] args)
         {
+            if (args.Length > 0)
+            {
+                foreach (string s in args) 
+                {
+                    Debug.Log("Launch args - "+ s);
+                }
+            }
+            _args = args;
         }
 
         UserProfile _profile;
@@ -24,7 +30,20 @@ namespace EZPower
         {
             InitUserProfile();
             PrintMotto();
-            ShowAvailableFeatures();
+
+            if (_args.Length > 0)
+            {
+                string input = "";
+                foreach (string s in _args)
+                {
+                    input += s + " ";
+                }
+                LaunchProgramFeature(input);
+            }
+            else
+            {
+                ShowAvailableFeatures();
+            }
 
             string inputText = "";
 
@@ -32,24 +51,29 @@ namespace EZPower
             {
                 inputText = CLI.ReadLine();
 
-                CheckGameCommands(inputText);
+                LaunchProgramFeature(inputText);
+            }
+        }
 
-                if (Reflect.DoesFeatureExist(CLIParser.ParseFeatureName(inputText)))
+        void LaunchProgramFeature(string inputText)
+        {
+            CheckGameCommands(inputText);
+
+            if (Reflect.DoesFeatureExist(CLIParser.ParseFeatureName(inputText)))
+            {
+                using (dynamic program = CLIParser.ParseCreateFeature(Reflect.GetClassFullName(CLIParser.ParseFeatureName(inputText))))
                 {
-                    using (dynamic program = CLIParser.ParseCreateFeature(Reflect.GetClassFullName(CLIParser.ParseFeatureName(inputText))))
+                    //key command and parameters
+                    try
                     {
-                        //key command and parameters
-                        try
-                        {
-                            CLI.Print(CLIParser.ParseFeatureName(inputText) + ":> ", ConsoleColor.Yellow, false);
-                            CLI.Print(CLIParser.ParseFeatureArgs(inputText, program), ConsoleColor.DarkCyan);
-                        }
-                        catch(Exception e)
-                        {
-                            Debug.Error("[Error] " + inputText + " : "+e.Message);
-                        }
-
+                        CLI.Print(CLIParser.ParseFeatureName(inputText) + ":> ", ConsoleColor.Yellow, false);
+                        CLI.Print(CLIParser.ParseFeatureArgs(inputText, program), ConsoleColor.DarkCyan);
                     }
+                    catch (Exception e)
+                    {
+                        Debug.Error("[Error] " + inputText + " : " + e.Message);
+                    }
+
                 }
             }
         }

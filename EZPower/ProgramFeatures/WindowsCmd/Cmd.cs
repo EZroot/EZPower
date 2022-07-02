@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EZPower.Core.CLIParser;
 
 namespace EZPower.ProgramFeatures.WindowsCmd
 {

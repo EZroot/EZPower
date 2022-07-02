@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EZPower.Core.CLIParser
+namespace EZPower
 {
     //replace the shit debug stuff
     public static class CLI

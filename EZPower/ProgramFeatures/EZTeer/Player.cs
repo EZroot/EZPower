@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EZPower.Core.CLIParser;
-using Newtonsoft.Json;
-
-namespace EZPower.ProgramFeatures
+﻿namespace EZPower.ProgramFeatures
 {
     public class Player
     {

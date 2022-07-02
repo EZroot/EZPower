@@ -1,9 +1,4 @@
-﻿using EZPower.Core.CLIParser;
-using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace EZPower.ProgramFeatures
+﻿namespace EZPower.ProgramFeatures
 {
     public class Gym
     {

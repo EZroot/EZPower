@@ -1,5 +1,4 @@
-﻿using EZPower.Core.CLIParser;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -29,6 +28,7 @@ namespace EZPower.ProgramFeatures
             T result = (T)CLIParser.LoadJsonObject<T>(typeof(T).Name);
             if (result == null)
             {
+                Debug.Error("Failed to load data. Creating new data..." + defaultData.GetType().Name);
                 result = CreateFeatureData<T>(defaultData);
             }
             return result;

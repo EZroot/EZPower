@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using EZPower.ProgramFeatures; 
 using Newtonsoft.Json;
 
-namespace EZPower.Core.CLIParser
+namespace EZPower
 {
     public static class CLIParser
     {
@@ -22,14 +22,12 @@ namespace EZPower.Core.CLIParser
         public static string LoadJson(string path)
         {
             path = Directory.GetCurrentDirectory() + "\\" + path + ".ezdat";
-            Debug.Warn(path);
-
             if (!File.Exists(path))
             {
-                Debug.Error("NO FILE EXISTS");
+                Debug.Error("NO FILE EXISTS "+path);
                 return ""; 
             }
-
+            Debug.Warn("Loaded data [" + path+"]");
             string result = "";
             using (StreamReader sr = new StreamReader(path))
             {
@@ -46,8 +44,7 @@ namespace EZPower.Core.CLIParser
         public static void SaveJson(string json, string path)
         {
             path = Directory.GetCurrentDirectory() + "\\"+path+".ezdat";
-            Debug.Warn(path);
-
+            Debug.Warn("Saved data [" + path + "]");
             using (StreamWriter sw = new StreamWriter(path))
             {
                 sw.WriteLine(json);
@@ -68,7 +65,7 @@ namespace EZPower.Core.CLIParser
         }
         public static object ParseCreateFeature(string featureName)
         {
-            Debug.Error(featureName);
+            Debug.Error("Creating Instance "+featureName);
             return Activator.CreateInstance(Type.GetType(featureName));
         }
 
@@ -121,7 +118,6 @@ namespace EZPower.Core.CLIParser
             string featureName = ParseFeatureName(cliText);
             foreach(ProgramFeatureInfo i in info)
             {
-                Debug.Error("Count");
                 if (i.ProgramName.ToLower().Contains(featureName.ToLower()))
                 {
                     Debug.Log("Program : " + i.ProgramName);
